@@ -1,0 +1,27 @@
+# Binaires compilés (Go)
+bin/
+sentinel
+sentinel.exe
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Fichiers de dépendances (Go)
+# On garde go.mod et go.sum, mais on ignore le dossier vendor si présent
+vendor/
+
+# Outils de l'OS
+.DS_Store
+Thumbs.db
+
+# IDE / Éditeurs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Fichiers temporaires ou logs locaux
+*.log
+tmp/
