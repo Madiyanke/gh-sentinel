@@ -3,26 +3,40 @@ package ai
 import (
 	"fmt"
 	"os/exec"
+	"regexp"
 	"strings"
 )
 
-func SuggestFix(errorLogs string) (string, error) {
-	// Trimming intelligent : on garde le début (contexte) et la fin (erreur)
-	lines := strings.Split(errorLogs, "\n")
-	content := errorLogs
-	if len(lines) > 60 {
-		content = strings.Join(lines[:20], "\n") + "\n...[TRUNCATED]...\n" + strings.Join(lines[len(lines)-40:], "\n")
-	}
+func SuggestFix(errorLogs string, workflowPath string) (string, string, error) {
+	instruction := fmt.Sprintf(
+		"As a Senior DevOps, analyze workflow '%s' with logs: %s. "+
+		"If SUCCESS, say 'Healthy'. If FAILURE, provide:\n"+
+		"1. A 2-sentence explanation.\n"+
+		"2. The full corrected YAML in a ```yaml block.",
+		workflowPath, errorLogs,
+	)
 
-	// Prompt optimisé pour le "Direct Fix"
-	prompt := fmt.Sprintf("Act as a Senior DevOps. Analyze this GitHub Action failure and provide the exact file change needed. Logs: %s", content)
-
-	// Note : On utilise 'explain' car 'suggest' est souvent trop interactif pour exec.Command
-	cmd := exec.Command("gh", "copilot", "explain", prompt)
+	cmd := exec.Command("gh", "copilot", "-p", instruction)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
-		return "", fmt.Errorf("Copilot inaccessible : %w", err)
+		return "", "", fmt.Errorf("erreur Copilot CLI: %v", err)
 	}
 
-	return string(out), nil
+	rawResult := string(out)
+
+	// Regex pour extraire le bloc de code YAML pur
+	re := regexp.MustCompile("(?s)```(?:yaml|yml)?\n(.*?)\n```")
+	match := re.FindStringSubmatch(rawResult)
+	
+	var codePart string
+	if len(match) > 1 {
+		codePart = strings.TrimSpace(match[1])
+	}
+
+	explanationPart := rawResult
+	if idx := strings.Index(rawResult, "```"); idx != -1 {
+		explanationPart = strings.TrimSpace(rawResult[:idx])
+	}
+
+	return explanationPart, codePart, nil
 }

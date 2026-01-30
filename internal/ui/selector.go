@@ -6,14 +6,12 @@ import (
 	"github.com/charmbracelet/lipgloss"
 )
 
-var (
-	titleStyle = lipgloss.NewStyle().MarginLeft(2).Foreground(lipgloss.Color("#7D56F4")).Bold(true)
-	docStyle   = lipgloss.NewStyle().Margin(1, 2)
-)
+var docStyle = lipgloss.NewStyle().Margin(1, 2)
 
 type Item struct {
 	TitleStr, DescStr string
 	ID                int64
+	Path              string
 }
 
 func (i Item) Title() string       { return i.TitleStr }
@@ -23,7 +21,6 @@ func (i Item) FilterValue() string { return i.TitleStr }
 type model struct {
 	list         list.Model
 	SelectedItem *Item
-	Quitting     bool
 }
 
 func (m model) Init() tea.Cmd { return nil }
@@ -32,14 +29,12 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.String() {
-		case "ctrl+c", "q":
-			m.Quitting = true
-			return m, tea.Quit
 		case "enter":
-			i, ok := m.list.SelectedItem().(Item)
-			if ok {
+			if i, ok := m.list.SelectedItem().(Item); ok {
 				m.SelectedItem = &i
 			}
+			return m, tea.Quit
+		case "q", "ctrl+c":
 			return m, tea.Quit
 		}
 	case tea.WindowSizeMsg:
@@ -52,18 +47,14 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m model) View() string {
-	if m.Quitting { return "" }
 	return docStyle.Render(m.list.View())
 }
 
 func StartSelector(items []list.Item) *Item {
 	l := list.New(items, list.NewDefaultDelegate(), 0, 0)
-	l.Title = "SENTINEL-CI : Échecs détectés"
-	l.Styles.Title = titleStyle
-
-	m := model{list: l}
-	p := tea.NewProgram(m, tea.WithAltScreen())
+	l.Title = " SENTINEL-CI : Échecs détectés "
+	p := tea.NewProgram(model{list: l}, tea.WithAltScreen())
 	finalModel, _ := p.Run()
-	
+	if finalModel == nil { return nil }
 	return finalModel.(model).SelectedItem
 }
