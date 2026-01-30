@@ -1,44 +1,39 @@
-# --- Binaries and Executables ---
-# Specifically, I ignore my extension binary and Go executables
+# Binaries (build output)
+gh-sentinel
 gh-sentinel.exe
-sentinel.exe
-sentinel
-bin/
+*.exe
+gh-sentinel-*
+
+# Build artifacts
 dist/
+build/
+*.test
 
-# --- Sentinel-CI Backup Files ---
-# My engine creates backups before patching; they should not be in Git
-*.bak
+# Coverage and test results
+coverage.out
+*.coverprofile
 
-# --- Go Dependencies ---
-# I NEVER ignore go.mod and go.sum
+# Dependencies
 vendor/
 
-# --- Tests and Coverage ---
-*.test
-*.out
-coverage.txt
-
-# --- IDE and Editors ---
-# VS Code
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-
-# JetBrains (IntelliJ, GoLand)
+# IDE configuration
+.vscode/
 .idea/
-
-# Temporary editor files
 *.swp
 *.swo
 *~
 
-# --- Operating System ---
+# OS files
 .DS_Store
 Thumbs.db
-desktop.ini
+Desktop.ini
 
-# --- Logs ---
-*.log
+# Temporary files
+*.tmp
+*.bak
+*.backup
+*.old
+
+# Sentinel runtime artifacts
+.sentinel/
+*.sentinel.bak

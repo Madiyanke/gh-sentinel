@@ -1,0 +1,13 @@
+name: gh-sentinel
+description: AI-powered DevOps guardian for GitHub Actions CI/CD pipeline repair
+author: Madiyanke
+tags:
+  - github-actions
+  - devops
+  - ci-cd
+  - ai
+  - automation
+platforms:
+  - windows
+  - linux
+  - darwin
