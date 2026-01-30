@@ -52,7 +52,7 @@ func (m model) View() string {
 
 func StartSelector(items []list.Item) *Item {
 	l := list.New(items, list.NewDefaultDelegate(), 0, 0)
-	l.Title = " SENTINEL-CI : Échecs détectés "
+	l.Title = " SENTINEL-CI: I detected failures "
 	p := tea.NewProgram(model{list: l}, tea.WithAltScreen())
 	finalModel, _ := p.Run()
 	if finalModel == nil { return nil }

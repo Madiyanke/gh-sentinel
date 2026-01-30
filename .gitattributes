@@ -1,2 +1,2 @@
-# Force tous les fichiers texte à utiliser LF (standard GitHub/Linux)
+# I force all text files to use LF (GitHub/Linux standard)
 * text=auto eol=lf

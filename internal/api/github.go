@@ -16,7 +16,7 @@ type SentinelClient struct {
 
 func NewClient() (*SentinelClient, error) {
 	out, err := exec.Command("gh", "repo", "view", "--json", "owner,name", "--jq", ".owner.login + \"/\" + .name").Output()
-	if err != nil { return nil, fmt.Errorf("contexte GitHub introuvable") }
+	if err != nil { return nil, fmt.Errorf("GitHub context not found") }
 	parts := strings.Split(strings.TrimSpace(string(out)), "/")
 	
 	token, _ := exec.Command("gh", "auth", "token").Output()

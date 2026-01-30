@@ -1,27 +1,44 @@
-# Binaires compilés (Go)
-bin/
-sentinel
+# --- Binaries and Executables ---
+# Specifically, I ignore my extension binary and Go executables
+gh-sentinel.exe
 sentinel.exe
-*.exe
-*.exe~
-*.dll
-*.so
-*.dylib
+sentinel
+bin/
+dist/
 
-# Fichiers de dépendances (Go)
-# On garde go.mod et go.sum, mais on ignore le dossier vendor si présent
+# --- Sentinel-CI Backup Files ---
+# My engine creates backups before patching; they should not be in Git
+*.bak
+
+# --- Go Dependencies ---
+# I NEVER ignore go.mod and go.sum
 vendor/
 
-# Outils de l'OS
-.DS_Store
-Thumbs.db
+# --- Tests and Coverage ---
+*.test
+*.out
+coverage.txt
 
-# IDE / Éditeurs
-.vscode/
+# --- IDE and Editors ---
+# VS Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# JetBrains (IntelliJ, GoLand)
 .idea/
+
+# Temporary editor files
 *.swp
 *.swo
+*~
 
-# Fichiers temporaires ou logs locaux
+# --- Operating System ---
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Logs ---
 *.log
-tmp/

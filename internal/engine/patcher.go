@@ -8,7 +8,7 @@ import (
 
 func ApplyPatch(filePath string, newContent string) error {
 	if !strings.Contains(newContent, "jobs:") && !strings.Contains(newContent, "name:") {
-		return fmt.Errorf("le correctif YAML semble invalide")
+		return fmt.Errorf("the YAML patch seems invalid (I check for jobs: or name:)")
 	}
 
 	old, err := os.ReadFile(filePath)

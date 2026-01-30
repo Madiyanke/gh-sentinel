@@ -24,7 +24,7 @@ func SuggestFix(errorLogs string, workflowPath string) (string, string, error) {
 
 	rawResult := string(out)
 
-	// Regex pour extraire le bloc de code YAML pur
+	// Regex for extracting the pure YAML code block (I use this to get the YAML)
 	re := regexp.MustCompile("(?s)```(?:yaml|yml)?\n(.*?)\n```")
 	match := re.FindStringSubmatch(rawResult)
 	
